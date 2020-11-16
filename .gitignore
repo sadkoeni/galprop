@@ -1,6 +1,7 @@
-build/
-outputTEST/
-TestLaura/
-DM_round_1/
-fits_tmp/
-fits/
+GALPROP_56.0.2870_Source/build/
+GALPROP_56.0.2870_Source/outputTEST/
+GALPROP_56.0.2870_Source/TestLaura/
+GALPROP_56.0.2870_Source/DM_round_1/
+GALPROP_56.0.2870_Source/fits_tmp/
+GALPROP_56.0.2870_Source/fits/
+galtoolslib-1.0.855-Source/build/
