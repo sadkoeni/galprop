@@ -1,0 +1,107 @@
+# - Config file for the galtoolslib package
+# It defines the following variables
+#  galtoolslib_INCLUDE_DIRS - include directories for galtoolslib
+#  galtoolslib_LIBRARIES    - libraries to link against
+#  galtoolslib_DEFINITIONS  - definitions to add when compiling
+#  galtoolslib_DATA_DIR     - data directory
+#  galtoolslib_CXX          - compiler used
+#  galtoolslib_CXX_FLAGS    - compiler flags used
+#  galtoolslib_OPENMP       - true if compiled with openmp multi-threading support
+#  galtoolslib_VERSION      - the version of the package
+#  galtoolslib_CMAKE_DIR    - path to all the extra macros included in the package
+#  galtoolslib_BUILD_TYPE   - CMAKE_BUILD_TYPE used for galtoolslib
+
+set(galtoolslib_VERSION @galtoolslib_VERSION@)
+
+set(galtoolslib_OPENMP @HAVE_OPENMP@)
+
+set(HAVE_WCS @HAVE_WCS@)
+if (HAVE_WCS)
+   set(galtoolslib_DEFINITIONS ${galtoolslib_DEFINITIONS} -DHAVE_WCS)
+endif()
+
+set(HAVE_OPENCL @HAVE_OPENCL@)
+if (HAVE_OPENCL)
+   set(galtoolslib_DEFINITIONS ${galtoolslib_DEFINITIONS} -DHAVE_OPENCL)
+   set(galtoolslib_DEFINITIONS ${galtoolslib_DEFINITIONS} -DCL_HPP_TARGET_OPENCL_VERSION=@OPENCL_VERSION@)
+   set(galtoolslib_DEFINITIONS ${galtoolslib_DEFINITIONS} -DCL_HPP_MINIMUM_OPENCL_VERSION=120)
+endif()
+
+set(USE_NATIVE_REGEX @USE_NATIVE_REGEX@)
+if (USE_NATIVE_REGEX)
+   set(galtoolslib_DEFINITIONS ${galtoolslib_DEFINITIONS} "-DUSE_NATIVE_REGEX=${USE_NATIVE_REGEX}")
+endif()
+
+set(HAVE_ALM_MAP_TOOLS_H @HAVE_ALM_MAP_TOOLS_H@)
+if (HAVE_ALM_MAP_TOOLS_H)
+   set(galtoolslib_DEFINITIONS ${galtoolslib_DEFINITIONS} -DHAVE_ALM_MAP_TOOLS_H)
+endif()
+
+set(HAVE_ALM_POWSPEC_TOOLS_H @HAVE_ALM_POWSPEC_TOOLS_H@)
+if (HAVE_ALM_POWSPEC_TOOLS_H)
+   set(galtoolslib_DEFINITIONS ${galtoolslib_DEFINITIONS} -DHAVE_ALM_POWSPEC_TOOLS_H)
+endif()
+
+set(HAVE_LSCONSTANTS_H @HAVE_LSCONSTANTS_H@)
+if (HAVE_LSCONSTANTS_H)
+   set(galtoolslib_DEFINITIONS ${galtoolslib_DEFINITIONS} -DHAVE_LSCONSTANTS_H)
+endif()
+
+set(HAVE_ALM_HEALPIX_TOOLS_H @HAVE_ALM_HEALPIX_TOOLS_H@)
+if (HAVE_ALM_HEALPIX_TOOLS_H)
+   set(galtoolslib_DEFINITIONS ${galtoolslib_DEFINITIONS} -DHAVE_ALM_HEALPIX_TOOLS_H)
+endif()
+
+set(HEALPIX_STD_COMPLEX @HEALPIX_STD_COMPLEX@)
+if (HEALPIX_STD_COMPLEX)
+   set(galtoolslib_DEFINITIONS ${galtoolslib_DEFINITIONS} -DHEALPIX_STD_COMPLEX)
+endif()
+
+set(ENABLE_COMPRESSION @ENABLE_COMPRESSION@)
+if (ENABLE_COMPRESSION)
+   set(galtoolslib_DEFINITIONS ${galtoolslib_DEFINITIONS} -DENABLE_COMPRESSION)
+endif()
+
+set(DEBUG @DEBUG@)
+if (DEBUG)
+   set(galtoolslib_DEFINITIONS ${galtoolslib_DEFINITIONS} -DDEBUG)
+endif()
+
+set(CLHEP_DIR @CLHEP_DIR@)
+if (NOT CLHEP_FOUND)
+   find_package(CLHEP REQUIRED)
+endif()
+
+@PACKAGE_INIT@
+ 
+# Compute paths
+if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/CMakeCache.txt")
+   # In build tree
+   set(galtoolslib_INCLUDE_DIRS "@PROJECT_SOURCE_DIR@/libskymap" "@PROJECT_SOURCE_DIR@/nuclei" "@PROJECT_SOURCE_DIR@/utils" "@PROJECT_SOURCE_DIR@/galstruct" "@PROJECT_SOURCE_DIR@/processes" "@PROJECT_SOURCE_DIR@/random" "@PROJECT_SOURCE_DIR@" "@PROJECT_BINARY_DIR@")
+   set(galtoolslib_CMAKE_DIR "@PROJECT_SOURCE_DIR@/cmake/Modules")
+   set(galtoolslib_DATA_DIR "@PROJECT_SOURCE_DIR@/processes")
+else()
+   set_and_check(galtoolslib_INCLUDE_DIRS "@PACKAGE_INSTALL_INCLUDE_DIR@")
+   set_and_check(galtoolslib_CMAKE_DIR "@PACKAGE_INSTALL_CMAKE_DIR@")
+   set_and_check(galtoolslib_DATA_DIR "@PACKAGE_INSTALL_DATA_DIR@")
+endif()
+
+ 
+# Our library dependencies (contains definitions for IMPORTED targets)
+if (NOT galtoolslibLibraryInclude)
+   include("${CMAKE_CURRENT_LIST_DIR}/galtoolslibLibraryDepends.cmake")
+   SET(galtoolslibLibraryInclude True)
+endif()
+
+set(galtoolslib_INCLUDE_DIRS ${galtoolslib_INCLUDE_DIRS} @HEALPix_INCLUDE_DIR@ @CCfits_INCLUDE_DIRS@ @WCS_INCLUDE_DIR@ @XERCESC_INCLUDE@ @GSL_INCLUDE_DIR@ @OpenCL_INCLUDE_DIRS@ ${CLHEP_INCLUDE_DIRS})
+ 
+# These are IMPORTED targets created by galtoolslibLibraryDepends.cmake
+set(galtoolslib_LIBRARIES skymap utils nuclei galstruct processes random @HEALPix_LIBRARIES@ @CCfits_LIBRARIES@ @WCS_LIBRARY@ @XERCESX_LIBRARY@ @GSL_LIBRARIES@ @OpenCL_LIBRARIES@ ${CLHEP_LIBRARIES})
+
+# The compiler and flags used
+set(galtoolslib_CXX @CMAKE_CXX_COMPILER@)
+set(galtoolslib_CXX_FLAGS "@galtoolslib_CXX_FLAGS@")
+set(galtoolslib_Fortran @CMAKE_Fortran_COMPILER@)
+set(galtoolslib_Fortran_FLAGS "@galtoolslib_Fortran_FLAGS@")
+
+set(galtoolslib_BUILD_TYPE "@CMAKE_BUILD_TYPE@")

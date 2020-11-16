@@ -1,0 +1,9 @@
+LPROP development is supported through NASA grants and by the Max Planck Society. The GALPROP web site http://galprop.stanford.edu and web services are supported through NASA grants and are free to use by the scientific community.
+
+Please acknowledge the use of the GALPROP code by quoting the web site http://galprop.stanford.edu/ and citing all GALPROP publications relevant to your results.
+
+In addition, if the WebRun service was used, cite the web page http://galprop.stanford.edu/webrun/ and this paper.
+
+If you have modified the code or data files downloaded from this web site and published your results, please provide your modifications back to the development team. Your modifications may be incorporated into the public version of GALPROP for the benefit of the scientific community.
+
+The redistribution of the GALPROP source code or its datasets, modified or not, through sites other than the original site without an explicit permission from the GALPROP team is not allowed. 

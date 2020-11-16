@@ -1,0 +1,88 @@
+galtoolslib README
+---------------------------------------------------------------------
+
+1.  galtoolslib is a set of library and tools required for GALPROP and GaRDiAn among other packages
+
+2. Installation 
+
+Several external publicly available packages are required to install galtoolslib:
+
+cfitsio: http://heasarc.gsfc.nasa.gov/fitsio/fitsio.html
+CCfits:  http://heasarc.gsfc.nasa.gov/docs/software/fitsio/ccfits/
+HEALPix: http://healpix.jpl.nasa.gov/
+CLHEP:   http://proj-clhep.web.cern.ch/proj-clhep/
+XERCES:  http://xerces.apache.org/xerces-c/
+gsl:     http://www.gnu.org/software/gsl/
+
+The following packages are optional but increase the functionality of libskymap
+
+WCSLIB:  http://www.atnf.csiro.au/people/mcalabre/WCS/wcslib/
+
+The code requires a C++11 compliant compiler.  Building with gcc version 4.9 or 
+higher is recommended, see note at the end.  The standard C++ library is very 
+sensitive to versioning so make sure the external C++ libraries (CCfits, HEALPix, 
+CLHEP, and XERCES-C) are built using the same compilers as galtoolslib.
+
+Many of these packages are available on Linux distributions or through macports on
+OS X. Note that the healpix_cxx package available on OSX via macports is incomplete and does not work with 
+galtoolslib.  Using a manual build of the official HEALPix package is recommended.
+
+The installation is made possible with cmake and building outside the source 
+directory is recommended.
+
+Assuming you are in the galtoolslib directory where this README is located
+the typical installation goes like this:
+
+#> mkdir build
+
+#> cd build
+
+#> cmake ../ -DCMAKE_INSTALL_PREFIX=<path for installed software> 
+
+#> make
+
+#> make install
+which puts the binary in <path for installed software>/bin
+      and the libraries in <path for installed software>/lib
+      and the headers in <path for installed software>/include
+
+If libraries are not installed in system location then their location can be
+set by setting the appropriate cmake variable in the CMakeCache.txt file or
+by entering it on the command line with -D<variable name>=/prefix/where/installed.
+The variable name to use differs between the packages but is given in the 
+error message. Cmake uses a caching mechanism so we recommend removing the
+CMakeFiles directory from the build directory if you encounter an error in 
+the configuration.  Sometimes starting from scratch and removing the entire
+build directory may be necessary.
+
+It is possible to specify different compilers by using the CMAKE 
+variables CMAKE_CXX_COMPILER, CMAKE_C_COMPILER, and CMAKE_Fortran_COMPILER.
+These should be set on the command line (e.g. -DCMAKE_CXX_COMPILER=icpc).
+
+The code is tested on a variety of compilers and linux distributions. In 
+addition, the code autodetects and compiles on the Apple/Mac version of the 
+BSD. The code will probably autodetect and compile under other 
+Unix-like variants but this is untested. Note that on OSX the 
+suggestion/requirement of consistent compilers for building galtoolslib 
+(and other packages) is especially important: if building using macports 
+packages that are compiled using clang/clang++ (from Xcode or macports) 
+and hence using libc++, link errors will occur if attempting to build 
+galtoolslib/galprop using gcc/g++ because of the incompatibility between
+the different C++ library interfaces. To prevent this issue, clang/clang++
+must also be used to build galtoolslib (preferably with a recent version 
+available via macports to have openmp support, e.g., clang/++ 3.9 or higher). 
+If macports packages are built using gcc/g++ then the same compilers should 
+be used to build galtoolslib/GALPROP. Note that using gfortran from macports 
+is safe whether building with clang/++ or gcc/++.
+
+The code is built by default with optimisation options -O3 and attempts 
+to use the native tuning options for the build machine. For x86 hosts if you 
+compile the binary on one machine and transfer to another it may default to 
+the slower code path (if dispatch is properly included), or may produce a 
+machine exception. This is due to different instruction sets between the host 
+and target machine. If this occurs compile without the native tuning flag. 
+The code requires a C++11 compliant compiler and has been tested with 
+gcc/g++ 4.9, 6.2, clang/clang++ 4, and icc/icpc 16 and 17. Testing has been 
+made on different Linux distributions (CentOS/RHEL 7, Gentoo, Suse) and OSX 
+(10.10 and later).
+

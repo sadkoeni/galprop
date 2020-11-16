@@ -1,0 +1,5 @@
+macro(setFromEnvVariable argName)
+   if(DEFINED ENV{${argName}})
+      set(${argName} $ENV{${argName}})
+   endif()
+endmacro()

@@ -1,0 +1,74 @@
+GALPROP README
+---------------------------------------------------------------------
+
+1.  GALPROP is a code for cosmic ray propagation and diffuse gamma ray production. 
+
+2. Installation 
+
+The package galtoolslib is required.  You should have received it along with GALPROP.
+
+The installation is made possible with cmake. We recommend
+building outside the source directory.
+
+Assuming you are in the GALPROP directory where this README is located
+the typical installation using cmake goes like this:
+
+#> mkdir build
+
+#> cd build
+
+#> cmake .. -DCMAKE_INSTALL_PREFIX=<path to install> -Dgaltoolslib_DIR=<galtoolslib install path>/lib/CMake -DCMAKE_C_COMPILER=<galtoolslib c compiler> -DCMAKE_CXX_COMPILER=<galtoolslib c++ compiler> -DGALDEF_PATH=<galdef file path> -DFITS_DATA=<FITS data path>
+
+#> make
+
+#> make install
+
+Note that the compiler and the compiler flags are by default the same as 
+the ones used in galtoolslib.
+
+Note that it is not necessary to specify the GALDEF or FITS data paths because these
+can also be specified via the command line at run time.
+
+The code is tested on a variety of compilers and linux distributions. In 
+addition, the code autodetects and compiles on the Apple/Mac version of the 
+BSD. The code will probably autodetect and compile under other 
+Unix-like variants this is untested. We don't support, nor care, about a 
+windows-based environment -- requests for such support will be ignored!
+
+3. To run galprop
+
+create  directory <path for GALDEF files>  and edit your galdef_56_xxxxxxx (start from examples in ./GALDEF)
+create  directory <path for FITS   files> then copy the required input files there from  ./FITS (see galdef for names of required files)
+create  directory <path for output FITS files> if different path required from <path for FITS files>. Now controlled on command line.
+
+Note: The paths to the GALDEF files or the data FITS files can be specified 
+on the command line to override the defaults specified during cmake configuration.
+
+To run galprop with configuration from galdef_56_xxxxxxx
+
+#> <directory for installed software>/bin/galprop -r xxxxxxx -o <path for output FITS files> -g <path for GALDEF files> -f <path for FITS input files>
+
+the output goes to <path for output FITS files>.
+
+
+there are additional command line options. Here are all of them:
+-r run ID                             mandatory
+-o <path for output FITS files)       overrides ./configure value
+-g <path for GALDEF files>            overrides ./configure value
+-f <path for input FITS files>        overrides ./configure value
+-p <prefix>                           optional prefix for the output files
+-h                                    shows galprop usage help
+
+If using OpenMP the number of threads can be controlled with the environment variable OMP_NUM_THREADS
+
+
+Note: the code is built by default with optimisation options -O3, parallelisation,
+and vector instructions (on x86 machines -- other architectures have similar
+options but have not been tuned due to no access to machines). OpenMP is enabled
+by default to take advantage of multi-core machines. We are working
+to provide more tuning dependent on processor sub-type and compiler. We test
+on the latest gcc and intel compilers present on our systems (Gnu/Linux, BSD,
+and OSX). Where possible native versions of the code are built as well as a default
+so that the same binaries are runnable on different CPUs (e.g., various x86_64 units).
+
+
